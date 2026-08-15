@@ -1,0 +1,32 @@
+version: "3.9"
+
+services:
+  cruncher:
+    build: ./java-service
+    ports:
+      - "8081:8081"
+    environment:
+      - PORT=8081
+
+  gateway:
+    build: ./python-gateway
+    ports:
+      - "8000:8000"
+    environment:
+      - PORT=8000
+      - JAVA_SERVICE_URL=http://cruncher:8081
+      - DB_PATH=/app/data/nexus.db
+    volumes:
+      - nexus-data:/app/data
+    depends_on:
+      - cruncher
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "8080:80"
+    depends_on:
+      - gateway
+
+volumes:
+  nexus-data:

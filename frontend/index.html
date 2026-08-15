@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nexus — Polyglot Playground</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <canvas id="particle-canvas"></canvas>
+
+  <div id="app">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-dot"></span> NEXUS
+        <span class="brand-sub">Python · Java · JavaScript · SQL</span>
+      </div>
+      <div class="topbar-right">
+        <span id="live-badge" class="badge">🔴 connecting…</span>
+        <button id="theme-toggle" class="icon-btn" title="Toggle theme">🌙</button>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <h1>A website built from <span class="gradient-text">four languages</span> that actually talk to each other.</h1>
+        <p class="hero-sub">
+          JavaScript renders this page and drives everything live. Python (FastAPI) is the gateway —
+          it owns the WebSocket, SQLite storage, and a from-scratch Markov text generator.
+          Java is a separate microservice doing number crunching, called live by Python over HTTP.
+          SQL is the schema underneath it all. Scroll down — everything on this page is real and running.
+        </p>
+        <div class="hero-actions">
+          <a href="#playground" class="btn">Explore the playground ↓</a>
+          <a href="https://github.com/YOUR_USERNAME/nexus" target="_blank" rel="noopener" class="btn secondary" id="github-link">View source on GitHub</a>
+        </div>
+      </section>
+
+      <section id="playground" class="grid-2">
+        <div class="panel">
+          <div class="panel-header">
+            <h2>🌀 Live Mandelbrot Explorer</h2>
+            <span class="tag">JavaScript · Canvas</span>
+          </div>
+          <p class="panel-desc">Click to zoom in, shift+click to zoom out. Rendered entirely in your browser, no server round-trip.</p>
+          <canvas id="fractal-canvas" width="560" height="420"></canvas>
+          <div class="fractal-controls">
+            <button id="fractal-reset" class="btn secondary small">Reset view</button>
+            <select id="fractal-palette" class="small-select">
+              <option value="fire">🔥 Fire</option>
+              <option value="ocean">🌊 Ocean</option>
+              <option value="neon">💜 Neon</option>
+              <option value="mono">⚪ Mono</option>
+            </select>
+            <span id="fractal-status" class="fractal-status"></span>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <h2>💬 Live Chat</h2>
+            <span class="tag">Python · WebSocket</span>
+          </div>
+          <p class="panel-desc">Real-time chat over a WebSocket held open by the FastAPI gateway. Open this page in two tabs to see it sync live.</p>
+          <div id="chat-messages" class="chat-messages"></div>
+          <form id="chat-form" class="chat-form">
+            <input id="chat-input" type="text" placeholder="Say something…" maxlength="280" autocomplete="off" />
+            <button type="submit" class="btn small">Send</button>
+          </form>
+        </div>
+      </section>
+
+      <section class="grid-2">
+        <div class="panel">
+          <div class="panel-header">
+            <h2>☕ Java Number Cruncher</h2>
+            <span class="tag">Java · REST microservice</span>
+          </div>
+          <p class="panel-desc">A dependency-free Java HTTP service. Python proxies these calls live — open the network tab and watch it round-trip through two languages.</p>
+
+          <div class="cruncher-controls">
+            <label>Palindrome / word check</label>
+            <div class="input-row">
+              <input id="text-input" type="text" placeholder="Try: A man a plan a canal Panama" />
+              <button id="text-check-btn" class="btn small">Check</button>
+            </div>
+            <div id="text-result" class="result-box"></div>
+          </div>
+
+          <div class="cruncher-controls">
+            <label>Collatz conjecture — steps to reach 1</label>
+            <div class="input-row">
+              <input id="collatz-input" type="number" value="27" min="1" />
+              <button id="collatz-btn" class="btn small">Run</button>
+            </div>
+            <canvas id="collatz-canvas" width="500" height="160"></canvas>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <h2>🤖 Markov Babbler</h2>
+            <span class="tag">Python · from scratch, no ML libs</span>
+          </div>
+          <p class="panel-desc">A real Markov chain (word bigrams) trained on a small absurdist corpus server-side. Not an LLM — genuinely simple statistics, and it shows.</p>
+          <div id="markov-output" class="markov-output">Click generate to babble something…</div>
+          <button id="markov-btn" class="btn">🎲 Generate nonsense</button>
+        </div>
+      </section>
+
+      <section class="grid-2">
+        <div class="panel">
+          <div class="panel-header">
+            <h2>📊 Polyglot Stats</h2>
+            <span class="tag">Python ⇄ Java ⇄ SQLite</span>
+          </div>
+          <p class="panel-desc">One API call, three languages involved: Python queries its own SQLite for visits, calls Java for a primes preview, and blends it all into one response.</p>
+          <div id="stats-grid" class="stats-grid"></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <h2>📖 Guestbook</h2>
+            <span class="tag">SQL · SQLite</span>
+          </div>
+          <p class="panel-desc">Persisted to disk. Still there when you reload.</p>
+          <form id="guestbook-form" class="guestbook-form">
+            <input id="guestbook-name" type="text" placeholder="Your name" maxlength="40" required />
+            <input id="guestbook-message" type="text" placeholder="Leave a note" maxlength="280" required />
+            <button type="submit" class="btn small">Sign</button>
+          </form>
+          <div id="guestbook-list" class="guestbook-list"></div>
+        </div>
+      </section>
+
+      <section class="panel wide">
+        <div class="panel-header">
+          <h2>💡 Wisdom &amp; jokes</h2>
+          <span class="tag">Python · static bank</span>
+        </div>
+        <div class="quote-row">
+          <blockquote id="quote-box">Click for a quote.</blockquote>
+          <div class="quote-actions">
+            <button id="quote-btn" class="btn secondary small">New quote</button>
+            <button id="joke-btn" class="btn secondary small">Tell a joke</button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p>Built with Python (FastAPI), Java (JDK HttpServer), JavaScript, and SQL. No frameworks hiding the interesting parts.
+        <button id="konami-hint" class="link-btn">Psst, try the Konami code</button>
+      </p>
+    </footer>
+  </div>
+
+  <div id="cursor-layer"></div>
+  <div id="konami-easter-egg" class="easter-egg hidden">
+    <div class="easter-egg-content">
+      <h2>🎉 You found it.</h2>
+      <p>You just triggered a client-side Easter egg with zero backend involvement — pure JavaScript event listening for the Konami code.</p>
+      <button id="close-easter-egg" class="btn">Close</button>
+    </div>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/particles.js"></script>
+  <script src="js/fractal.js"></script>
+  <script src="js/live-socket.js"></script>
+  <script src="js/cruncher.js"></script>
+  <script src="js/dashboard.js"></script>
+  <script src="js/easter-egg.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
